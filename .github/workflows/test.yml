@@ -40,7 +40,7 @@ jobs:
         exclude:
           - os: ${{ github.repository_owner == 'clumio-code' && '_' || 'macos-latest' }}
           - os: ${{ github.repository_owner == 'clumio-code' && '_' || 'windows-latest' }}
-          - go: ${{ github.repository_owner == 'clumio-code' && '_' || "${{ env.GO_LATEST }}" }}
+          - go: ${{ github.repository_owner == 'clumio-code' && '_' || '1.23' }}
             # If updating the Go version to exclude here, ensure to update the
             # SonarCloud Scan condition below.
     runs-on: ${{ matrix.os }}
