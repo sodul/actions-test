@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Select Go versions
         id: go_versions
-        run: echo "go_versions=['$GO_LATEST', '$GO_PREVIOUS']" | tee -a "$GITHUB_OUTPUT"
+        run: echo "go_versions={go_versions=['$GO_LATEST','$GO_PREVIOUS']}" | tee -a "$GITHUB_OUTPUT"
 
   build-and-test:
     name: Build
