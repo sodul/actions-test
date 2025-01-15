@@ -41,7 +41,7 @@ jobs:
         exclude:
           - os: ${{ github.repository_owner == 'sodul' && '_' || 'macos-latest' }}
           - os: ${{ github.repository_owner == 'sodul' && '_' || 'windows-latest' }}
-          - go: ${{ github.repository_owner == 'sodul' && '_' || '1.23' }}
+          - go: ${{ github.repository_owner == 'sodul' && '_' || env.GO_LATEST }}
             # If updating the Go version to exclude here, ensure to update the
             # SonarCloud Scan condition below.
     runs-on: ${{ matrix.os }}
