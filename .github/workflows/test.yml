@@ -1,0 +1,65 @@
+# This GitHub action runs your tests for each commit push and/or PR.
+#
+name: Tests
+on:
+  pull_request:
+    branches: [ '**' ]
+  push:
+    branches: [ 'main', 'release/**' ]
+  workflow_dispatch:
+    # Allows us to trigger this action manually.
+env:
+  # This activates boringcrypto which provides FIPS compliant crypto libraries.
+  GOEXPERIMENT: boringcrypto
+  # Prevent Go from downloading other versions from the Internet.
+  GOTOOLCHAIN: local
+  ENABLE_TEST_REPORTS: false
+  # This should be the latest 2 major releases of Go, older versions are
+  # not maintained and lack security updates.
+  GO_LATEST: 1.23
+  GO_PREVIOUS: 1.22
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      go_versions: ${{ steps.go_versions.outputs.go_versions }}
+    steps:
+      - name: Select Go versions
+        id: go_versions
+        run: echo "go_versions=['$GO_LATEST', '$GO_PREVIOUS']" >> "$GITHUB_OUTPUT"
+
+  build-and-test:
+    name: Build
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        go: ${{ fromJson(needs.prepare.outputs.go_versions) }}
+        # Use a dynamic matrix to allow testing multiple OSes and Go versions
+        # in the public repository but reduce combinations in private clones.
+        exclude:
+          - os: ${{ github.repository_owner == 'clumio-code' && '_' || 'macos-latest' }}
+          - os: ${{ github.repository_owner == 'clumio-code' && '_' || 'windows-latest' }}
+          - go: ${{ github.repository_owner == 'clumio-code' && '_' || "${{ env.GO_LATEST }}" }}
+            # If updating the Go version to exclude here, ensure to update the
+            # SonarCloud Scan condition below.
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ matrix.go }}
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v4
+
+    - name: Show Environment
+      shell: bash
+      run: |
+        echo "pwd: $(pwd)"
+        echo "matrix.os=${{ matrix.os }}"
+        echo "matrix.go=${{ matrix.go }}"
+        echo "github.repository_owner=${{ github.repository_owner }}"
+        go version
+
