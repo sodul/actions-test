@@ -39,9 +39,9 @@ jobs:
         # Use a dynamic matrix to allow testing multiple OSes and Go versions
         # in the public repository but reduce combinations in private clones.
         exclude:
-          - os: ${{ github.repository_owner == 'clumio-code' && '_' || 'macos-latest' }}
-          - os: ${{ github.repository_owner == 'clumio-code' && '_' || 'windows-latest' }}
-          - go: ${{ github.repository_owner == 'clumio-code' && '_' || '1.23' }}
+          - os: ${{ github.repository_owner == 'sodul' && '_' || 'macos-latest' }}
+          - os: ${{ github.repository_owner == 'sodul' && '_' || 'windows-latest' }}
+          - go: ${{ github.repository_owner == 'sodul' && '_' || '1.23' }}
             # If updating the Go version to exclude here, ensure to update the
             # SonarCloud Scan condition below.
     runs-on: ${{ matrix.os }}
