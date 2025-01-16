@@ -69,8 +69,9 @@ jobs:
         go version
   checks:
     # This is to ensure we have a target for branch protection rules.
+    runs-on: ubuntu-latest
     name: Checks
-    needs: Build
+    needs: [build-and-test]
     steps:
-      run: echo "prior steps should have worked"
+    -  run: echo "prior steps should have worked"
 
