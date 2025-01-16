@@ -43,9 +43,9 @@ jobs:
         # Use a dynamic matrix to allow testing multiple OSes and Go versions
         # in the public repository but reduce combinations in private clones.
         exclude:
-          - os: ${{ github.repository_owner == 'sodulx' && '_' || 'macos-latest' }}
-          - os: ${{ github.repository_owner == 'sodulx' && '_' || 'windows-latest' }}
-          - go: ${{ github.repository_owner == 'sodulx' && '_' || needs.prepare.outputs.go_latest }}
+          - os: ${{ github.repository_owner == 'sodul' && '_' || 'macos-latest' }}
+          - os: ${{ github.repository_owner == 'sodul' && '_' || 'windows-latest' }}
+          - go: ${{ github.repository_owner == 'sodul' && '_' || needs.prepare.outputs.go_latest }}
             # If updating the Go version to exclude here, ensure to update the
             # SonarCloud Scan condition below.
     runs-on: ${{ matrix.os }}
@@ -56,8 +56,8 @@ jobs:
       with:
         go-version: ${{ matrix.go }}
 
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v4
+#    - name: Check out code into the Go module directory
+#      uses: actions/checkout@v4
 
     - name: Show Environment
       shell: bash
@@ -67,6 +67,9 @@ jobs:
         echo "matrix.go=${{ matrix.go }}"
         echo "github.repository_owner=${{ github.repository_owner }}"
         go version
+        if [[ "${{ matrix.go }}" == "$GO_LATEST" ]];
+          false
+        fi
   checks:
     # This is to ensure we have a target for branch protection rules.
     runs-on: ubuntu-latest
