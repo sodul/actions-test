@@ -67,4 +67,10 @@ jobs:
         echo "matrix.go=${{ matrix.go }}"
         echo "github.repository_owner=${{ github.repository_owner }}"
         go version
+  checks:
+    # This is to ensure we have a target for branch protection rules.
+    name: Checks
+    needs: Build
+    steps:
+      run: echo "prior steps should have worked"
 
