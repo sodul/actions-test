@@ -68,7 +68,7 @@ jobs:
         echo "github.repository_owner=${{ github.repository_owner }}"
         go version
         if [[ "${{ matrix.go }}" == "$GO_LATEST" ]]; then
-          true
+          false
         fi
   checks:
     # This is to ensure we have a target for branch protection rules.
