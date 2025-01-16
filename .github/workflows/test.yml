@@ -67,7 +67,7 @@ jobs:
         echo "matrix.go=${{ matrix.go }}"
         echo "github.repository_owner=${{ github.repository_owner }}"
         go version
-        if [[ "${{ matrix.go }}" == "$GO_LATEST" ]];
+        if [[ "${{ matrix.go }}" == "$GO_LATEST" ]]; then
           false
         fi
   checks:
